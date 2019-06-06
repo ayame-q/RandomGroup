@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Random Group</title>
+    <script>
+        /**
+         Random Group index.html
+
+         Copyright (c) 2019 ayame.space
+
+         This software is released under the MIT License.
+         http://opensource.org/licenses/mit-license.php
+         */
+        function shuffle_arr(array) {
+            for (var i = array.length - 1; i >= 0; i--){
+                var rand = Math.floor( Math.random() * ( i + 1 ) );
+                [array[i], array[rand]] = [array[rand], array[i]]
+            }
+            return array
+        }
+        function randomgroup() {
+            var group_length = document.getElementById("group_length").value
+            var member_num = document.getElementById("member_num").value
+            var source_str = document.getElementById("source").value
+            var source = source_str.replace(/(\r)?\n/g, ",").split(",").filter(Boolean);
+            var max_name_length = 0
+            if(!group_length.match(/[0-9]+/)){
+                group_length = Math.ceil(source.length / member_num)
+            }
+            if(!member_num.match(/[0-9]+/)){
+                member_num = Math.ceil(source.length / group_length)
+            }
+            var result = []
+            for (var i = 0; i < group_length; i++){
+                result[i] = []
+            }
+            for (var i = 0; i < source.length; i++){
+                var m = source[i].match(/(.+):([0-9]+)/)
+                if(m){
+                    result[m[2] - 1].push(m[1])
+                    source[i] = null
+                }
+            }
+            source = source.filter(Boolean)
+            var shuffled = shuffle_arr(source)
+
+            var now = 0
+            for (let x of shuffled){
+                while (result[now].length >= member_num){
+                    if(now < group_length - 1){
+                        now += 1
+                    }else{
+                        now = 0
+                    }
+                }
+                if(result[now].length < member_num){
+                    result[now].push(x)
+                }
+
+                if(now < group_length - 1){
+                    now += 1
+                }else{
+                    now = 0
+                }
+            }
+            var dl_result = document.querySelector("#result > dl")
+            dl_result.textContent = null
+            for (var i = 0; i < result.length; i++) {
+                var div_group = document.createElement("div")
+                div_group.classList.add("group")
+                dl_result.appendChild(div_group)
+                var dt = document.createElement("dt")
+                dt.textContent = "グループ" + (i + 1)
+                div_group.appendChild(dt)
+                var dd = document.createElement("dd")
+                div_group.appendChild(dd)
+                for (j = 0; j < result[i].length; j++) {
+                    if(max_name_length < result[i][j].length){
+                        max_name_length = result[i][j].length
+                    }
+                    var li = document.createElement("li")
+                    li.textContent = result[i][j]
+                    dd.appendChild(li)
+                }
+            }
+
+            if(window.innerWidth >= 1200){
+                var columns = 3
+            }else if(window.innerWidth >= 600) {
+                var columns = 2
+            }else{
+                var columns = 1
+            }
+            var vw = 100 / (max_name_length * columns + 3 * columns)
+
+            var dom_style = document.getElementById("style_font_size")
+            dom_style.textContent = `
+            section#result dt{
+            font-size: ${vw*1.2}vw
+            }
+            section#result li{
+            font-size: ${vw}vw
+            }`
+
+            document.getElementById("inputform").classList.add("hidden")
+            document.getElementById("result").classList.remove("hidden")
+            return false
+        }
+        function backinput() {
+            document.getElementById("inputform").classList.remove("hidden")
+            document.getElementById("result").classList.add("hidden")
+        }
+        function on_input(dom_id) {
+            var other_id = {group_length: "member_num", member_num: "group_length"}
+            var other = document.getElementById(other_id[dom_id])
+            if(document.getElementById(domid).value != ""){
+                other.value = ""
+                other.setAttribute("readonly", "readonly")
+            }else{
+                other.removeAttribute("readonly")
+            }
+            return true
+        }
+    </script>
+    <style>
+        section#inputform #dl_nums{
+            display: flex;
+        }
+        section#inputform #dl_nums div{
+            padding: 0 1em;
+        }
+        section#result{
+            height: 100%;
+        }
+        section#result dt{
+            font-size: 5vh
+        }
+        section#result li{
+            font-size: 4vh;
+        }
+        section#result dl{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        @media only screen and (min-width: 1200px) {
+            section#result div.group{
+                width: 32%;
+                padding: 0.5%;
+            }
+        }
+        @media only screen and (max-width: 1199px) and (min-width: 600px) {
+            section#result div.group{
+                width: 49%;
+                padding: 0.5%;
+            }
+        }
+        @media only screen and (max-width: 599px) {
+            section#result div.group{
+                width: 99%;
+                padding: 0.5%;
+            }
+        }
+        li{
+            list-style: none;
+        }
+        .hidden{
+            display: none;
+        }
+    </style>
+    <style id="style_font_size"></style>
+</head>
+<body>
+    <main>
+        <section id="inputform">
+            <h1>RandomGroup</h1>
+            <form onsubmit="randomgroup(); return false;" action="#">
+                <dl id="dl_nums">
+                    <div>
+                        <dt><label for="group_length">グループ総数</label></dt>
+                        <dd><input type="number" id="group_length" oninput="on_input('group_length')"></dd>
+                    </div>
+                    <div>
+                        <dt><label for="member_num">1グループの最大人数</label></dt>
+                        <dd><input type="number" id="member_num" oninput="on_input('member_num')" value="5"></dd>
+                    </div>
+                </dl>
+                <dl id="dl_result">
+                    <p><small>※グループ総数か1グループの最大人数のどちらか一方を指定してください</small></p>
+                    <dt><label for="source">名前リスト(カンマ区切りまたは改行区切り)[名前の後ろに :グループ番号 でグループ指定]</label></dt>
+                    <dd><textarea id="source" placeholder="name[:group]" cols="60" rows="12"></textarea></dd>
+                </dl>
+                <p><input type="submit" value="シャッフル"></p>
+            </form>
+        </section>
+        <section id="result" class="hidden">
+            <dl></dl>
+            <p><button onclick="randomgroup()">再シャッフル</button><button onclick="backinput()">戻る</button></p>
+        </section>
+    </main>
+    <footer><small>Copyright &copy; 2019 ayame.space</small></footer>
+</body>
+</html>

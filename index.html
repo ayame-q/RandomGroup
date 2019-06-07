@@ -167,6 +167,25 @@
         .hidden{
             display: none;
         }
+        footer{
+            display: flex;
+        }
+        footer p{
+            padding-right: 0.5em;
+            margin: 0;
+        }
+        footer ul{
+            margin: 0;
+            padding: 0;
+        }
+        footer ul li::before{
+            content: "(";
+            font-size: smaller;
+        }
+        footer ul li::after{
+            content: ")";
+            font-size: smaller;
+        }
     </style>
     <style id="style_font_size"></style>
 </head>
@@ -198,6 +217,13 @@
             <p><button onclick="randomgroup()">再シャッフル</button><button onclick="backinput()">戻る</button></p>
         </section>
     </main>
-    <footer><small>Copyright &copy; 2019 ayame.space</small></footer>
+    <footer>
+        <p><small>Copyright &copy; 2019 ayame.space</small></p>
+        <nav>
+            <ul>
+                <li id="github"><small><a href="https://github.com/ayame-q/RandomGroup">github</a></small></li>
+            </ul>
+        </nav>
+    </footer>
 </body>
 </html>

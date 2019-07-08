@@ -13,39 +13,39 @@
          http://opensource.org/licenses/mit-license.php
          */
         function shuffle_arr(array) {
-            for (var i = array.length - 1; i >= 0; i--){
-                var rand = Math.floor( Math.random() * ( i + 1 ) );
+            for (let i = array.length - 1; i >= 0; i--){
+                const rand = Math.floor( Math.random() * ( i + 1 ) );
                 [array[i], array[rand]] = [array[rand], array[i]]
             }
             return array
         }
         function randomgroup() {
-            var group_length = document.getElementById("group_length").value
-            var member_num = document.getElementById("member_num").value
-            var source_str = document.getElementById("source").value
-            var source = source_str.replace(/(\r)?\n/g, ",").split(",").filter(Boolean);
-            var max_name_length = 0
+            let group_length = document.getElementById("group_length").value
+            let member_num = document.getElementById("member_num").value
+            const source_str = document.getElementById("source").value
+            let source = source_str.replace(/(\r)?\n/g, ",").split(",").filter(Boolean);
+            let max_name_length = 0
             if(!group_length.match(/[0-9]+/)){
                 group_length = Math.ceil(source.length / member_num)
             }
             if(!member_num.match(/[0-9]+/)){
                 member_num = Math.ceil(source.length / group_length)
             }
-            var result = []
-            for (var i = 0; i < group_length; i++){
+            let result = []
+            for (let i = 0; i < group_length; i++){
                 result[i] = []
             }
-            for (var i = 0; i < source.length; i++){
-                var m = source[i].match(/(.+):([0-9]+)/)
+            for (let i = 0; i < source.length; i++){
+                let m = source[i].match(/(.+):([0-9]+)/)
                 if(m){
                     result[m[2] - 1].push(m[1])
                     source[i] = null
                 }
             }
             source = source.filter(Boolean)
-            var shuffled = shuffle_arr(source)
+            const shuffled = shuffle_arr(source)
 
-            var now = 0
+            let now = 0
             for (let x of shuffled){
                 while (result[now].length >= member_num){
                     if(now < group_length - 1){
@@ -64,37 +64,38 @@
                     now = 0
                 }
             }
-            var dl_result = document.querySelector("#result > dl")
+            let dl_result = document.querySelector("#result > dl")
             dl_result.textContent = null
-            for (var i = 0; i < result.length; i++) {
-                var div_group = document.createElement("div")
+            for (let i = 0; i < result.length; i++) {
+                const div_group = document.createElement("div")
                 div_group.classList.add("group")
                 dl_result.appendChild(div_group)
-                var dt = document.createElement("dt")
+                const dt = document.createElement("dt")
                 dt.textContent = "グループ" + (i + 1)
                 div_group.appendChild(dt)
-                var dd = document.createElement("dd")
+                const dd = document.createElement("dd")
                 div_group.appendChild(dd)
-                for (j = 0; j < result[i].length; j++) {
+                for (let j = 0; j < result[i].length; j++) {
                     if(max_name_length < result[i][j].length){
                         max_name_length = result[i][j].length
                     }
-                    var li = document.createElement("li")
+                    const li = document.createElement("li")
                     li.textContent = result[i][j]
                     dd.appendChild(li)
                 }
             }
 
+            let columns
             if(window.innerWidth >= 1200){
-                var columns = 3
+                columns = 3
             }else if(window.innerWidth >= 600) {
-                var columns = 2
+                columns = 2
             }else{
-                var columns = 1
+                columns = 1
             }
-            var vw = 100 / (max_name_length * columns + 3 * columns)
+            const vw = 100 / (max_name_length * columns + 3 * columns)
 
-            var dom_style = document.getElementById("style_font_size")
+            const dom_style = document.getElementById("style_font_size")
             dom_style.textContent = `
             section#result dt{
             font-size: ${vw*1.2}vw
@@ -112,9 +113,9 @@
             document.getElementById("result").classList.add("hidden")
         }
         function on_input(dom_id) {
-            var other_id = {group_length: "member_num", member_num: "group_length"}
-            var other = document.getElementById(other_id[dom_id])
-            if(document.getElementById(domid).value != ""){
+            const other_id = {group_length: "member_num", member_num: "group_length"}
+            const other = document.getElementById(other_id[dom_id])
+            if(document.getElementById(dom_id).value !== ""){
                 other.value = ""
                 other.setAttribute("readonly", "readonly")
             }else{
@@ -209,7 +210,7 @@
                     <dt><label for="source">名前リスト(カンマ区切りまたは改行区切り)[名前の後ろに :グループ番号 でグループ指定]</label></dt>
                     <dd><textarea id="source" placeholder="name[:group]" cols="60" rows="12"></textarea></dd>
                 </dl>
-                <p><input type="submit" value="シャッフル"></p>
+                <p><input type="submit" value="シャッフル"><input type="reset" value="リセット"></p>
             </form>
         </section>
         <section id="result" class="hidden">

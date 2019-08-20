@@ -1,0 +1,89 @@
+/**
+ Random Group main.scss
+
+ Copyright (c) 2019 ayame.space
+
+ This software is released under the MIT License.
+ http://opensource.org/licenses/mit-license.php
+ */
+@mixin media($a: false, $b: false, $c: false){
+	$value: large;
+	@if($a == $value or $b == $value or $c == $value){
+		@media only screen and (min-width: 1200px) {
+			@content;
+		}
+	}
+
+	$value: medium;
+	@if($a == $value or $b == $value or $c == $value){
+		@media only screen and (max-width: 1199px) and (min-width: 600px) {
+			@content;
+		}
+	}
+
+	$value: small;
+	@if($a == $value or $b == $value or $c == $value){
+		@media only screen and (max-width: 599px) {
+			@content;
+		}
+	}
+}
+section#inputform #dl_nums{
+	display: flex;
+	div{
+		padding: 0 1em;
+	}
+}
+section#result{
+	height: 100%;
+	dt{
+		font-size: 5vh
+	}
+	li{
+		font-size: 4vh;
+	}
+	dl{
+		display: flex;
+		flex-wrap: wrap;
+	}
+}
+section#result div.group{
+	padding: 0.5%;
+	@include media(large) {
+		width: 32%;
+	}
+	@include media(medium) {
+		width: 49%;
+	}
+	@include media(small) {
+		width: 99%;
+	}
+}
+
+li{
+	list-style: none;
+}
+.hidden{
+	display: none;
+}
+footer{
+	display: flex;
+	p{
+		padding-right: 0.5em;
+		margin: 0;
+	}
+	ul{
+		margin: 0;
+		padding: 0;
+	}
+	li{
+		&::before{
+			content: "(";
+			font-size: smaller;
+		}
+		&::after{
+			content: ")";
+			font-size: smaller;
+		}
+	}
+}

@@ -1,0 +1,77 @@
+/**
+ Random Group main.scss
+
+ Copyright (c) 2019 ayame.space
+
+ This software is released under the MIT License.
+ http://opensource.org/licenses/mit-license.php
+ */
+section#inputform #dl_nums {
+  display: flex;
+}
+section#inputform #dl_nums div {
+  padding: 0 1em;
+}
+
+section#result {
+  height: 100%;
+}
+section#result dt {
+  font-size: 5vh;
+}
+section#result li {
+  font-size: 4vh;
+}
+section#result dl {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+section#result div.group {
+  padding: 0.5%;
+}
+@media only screen and (min-width: 1200px) {
+  section#result div.group {
+    width: 32%;
+  }
+}
+@media only screen and (max-width: 1199px) and (min-width: 600px) {
+  section#result div.group {
+    width: 49%;
+  }
+}
+@media only screen and (max-width: 599px) {
+  section#result div.group {
+    width: 99%;
+  }
+}
+
+li {
+  list-style: none;
+}
+
+.hidden {
+  display: none;
+}
+
+footer {
+  display: flex;
+}
+footer p {
+  padding-right: 0.5em;
+  margin: 0;
+}
+footer ul {
+  margin: 0;
+  padding: 0;
+}
+footer li::before {
+  content: "(";
+  font-size: smaller;
+}
+footer li::after {
+  content: ")";
+  font-size: smaller;
+}
+
+/*# sourceMappingURL=main.css.map */
